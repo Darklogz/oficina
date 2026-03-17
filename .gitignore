@@ -1,2 +1,29 @@
-node_modules
+# dependencias
+node_modules/
+
+# variables de entorno
 .env
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+# archivos del sistema
+.DS_Store
+Thumbs.db
+
+# cache
+.npm
+.cache
+
+# coverage tests
+coverage/
+
+# build
+dist/
+build/
+
+# archivos temporales
+*.tmp
+*.temp
