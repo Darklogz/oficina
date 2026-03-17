@@ -3,6 +3,7 @@ node_modules/
 
 # variables de entorno
 .env
+.env.local
 
 # logs
 logs
@@ -27,3 +28,7 @@ build/
 # archivos temporales
 *.tmp
 *.temp
+
+# backups de base de datos
+*.sql
+*.dump
