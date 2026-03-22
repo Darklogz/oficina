@@ -1,12 +1,30 @@
 const express = require('express')
-const app = express()
 const dotenv = require('dotenv')
+const mysql = require('mysql2/promise')
 const path = require('path')
 
+//crea el sevidor
+const app = express()
 //Extrae los datos necesarios de el archivo .env
 dotenv.config()
 
 const port = process.env.PORT
+
+//conexion con la base de datos
+
+async function crearConexion(mysql) {
+    let conexion = await mysql.createConnection({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+        port: process.env.DB_PORT
+    })
+    return conexion
+}
+
+//variable para los queries
+let consultas = await crearConexion(mysql);
 
 //Deshabilitamos la transmicion informacion confidencial de el servidor para mas seguridad
 app.disable('x-powered-by')
@@ -22,11 +40,23 @@ app.get('/',(req,res) =>{
     res.contentType('text/html')
     res.sendFile(path.join(__dirname, 'Public','Paginas','login.html'))
 })
-app.get('/login',(req,res)=>{
-    const idEmpleado = req.body 
+
+//logica para el inicio de sesion
+app.post('/login',async (req,res)=>{
+    //trae los datos de el form
+    const { username, password } = req.body
+    //extrae solo el arreglo sin metadatos y realiza la consulta
+    const [[usuario]] = await consultas.query(
+        'SELECT * FROM usuarios WHERE usuario = ? AND contraseña = ?',
+        [username, password]
+    )
+
+    if (!usuario) {
+       return res.json({ mensaje: 'Usuario o contraseña incorrectos' })
+    }else{
+        res.json({ mensaje: 'Login exitoso' })
+    }
 })
-
-
 
 //Funciona como HANDLER para cuando no se encuentra cierta direccion
 app.use((req, res) => {
@@ -36,6 +66,8 @@ app.use((req, res) => {
         '\nUps parce que la pagina que buscas no existe intenta con otra');
 });
 
+
+//activa el servidor
 app.listen(port, () => {
     console.log(`Escuchando el puerto ${port} 
     Entra a la pagina principal desde aqui http://localhost:3000`)
