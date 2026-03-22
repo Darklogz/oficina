@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipo No.1 - Chamoneta Inc</title>
+    <link rel="stylesheet" href="computadora.css">
+</head>
+<body>
+ 
+    <nav class="navbar">
+        <a href="main.html" class="btn-regresar">← Regresar a equipos</a>
+        <a href="#popup-usuario" class="nav-user">
+            <div class="nav-avatar">SM</div>
+            <div class="nav-info">
+                <span class="nav-name">Santiago Mogollán Cuevas</span>
+                <span class="nav-role">Admin</span>
+            </div>
+        </a>
+    </nav>
+ 
+    <!--popup usuario-->
+    <div class="popup-overlay" id="popup-usuario">
+        <a href="#" class="popup-fondo"></a>
+        <div class="popup-caja popup-caja--usuario">
+            <a href="#" class="popup-cerrar">✕</a>
+            <div class="popup-user-header">
+                <div class="popup-avatar">SM</div>
+                <div>
+                    <p class="popup-user-name">Santiago Mogollán Cuevas</p>
+                    <p class="popup-user-role">Admin</p>
+                </div>
+            </div>
+            <a href="login.html" class="btn-cerrar-sesion">Cerrar Sesión</a>
+        </div>
+    </div>
+ 
+    <!--popup de historial de mantenimiento-->
+    <div class="popup-overlay" id="popup-mantenimiento">
+        <a href="#" class="popup-fondo"></a>
+        <div class="popup-caja popup-caja--mantenimiento">
+            <a href="#" class="popup-cerrar">✕</a>
+ 
+            <h3 class="mant-titulo">Historial de Mantenimiento</h3>
+ 
+            <!--registro 1-->
+            <div class="mant-registro">
+                <p class="mant-fecha">19/diciembre/2025</p>
+                <hr class="mant-linea">
+                <p class="mant-dato">Tipo de mantenimiento: Preventivo</p>
+                <hr class="mant-linea">
+                <p class="mant-dato">Se cambio la pasta termica del equipo</p>
+            </div>
+ 
+            <!--registro 2-->
+            <div class="mant-registro">
+                <p class="mant-fecha">30/diciembre/2025</p>
+                <hr class="mant-linea">
+                <p class="mant-dato">Tipo de mantenimiento: Preventivo</p>
+                <hr class="mant-linea">
+                <p class="mant-dato">Se limpio el equipo</p>
+            </div>
+ 
+        </div>
+    </div>
+ 
+    <div class="pagina-titulo">
+        <h1>Equipo No.1</h1>
+    </div>
+ 
+    <div class="detalle-container">
+ 
+        <!--columna izquierda-->
+        <div class="col-izquierda">
+ 
+            <!--pc imagen-->
+            <div class="equipo-img">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none">
+                    <rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/>
+                    <rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/>
+                    <rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/>
+                    <rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/>
+                    <rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/>
+                    <rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/>
+                    <circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/>
+                </svg>
+            </div>
+ 
+            <!--empleado asignado-->
+            <div class="info-seccion">
+                <p class="info-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2"/>
+                        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                    </svg>
+                    Empleado Asignado
+                </p>
+                <p class="info-valor-grande">Pepito</p>
+            </div>
+ 
+            <hr class="divisor">
+ 
+            <!--fecha-->
+            <div class="info-seccion">
+                <p class="info-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                    </svg>
+                    Fecha
+                </p>
+                <p class="info-valor-grande">14/marzo/2026</p>
+            </div>
+ 
+            <!--generar reporte-->
+            <a href="#" class="btn-reporte">Generar reporte</a>
+ 
+        </div>
+ 
+        <!--columna derecha-->
+        <div class="col-derecha">
+ 
+            <div class="spec-fila">
+                <span class="spec-label">No.Inventario:</span>
+                <span class="spec-valor">PC-001</span>
+            </div>
+            <hr class="spec-divisor">
+ 
+            <div class="spec-fila">
+                <span class="spec-label">Marca:</span>
+                <span class="spec-valor">Dell</span>
+            </div>
+            <hr class="spec-divisor">
+ 
+            <div class="spec-fila">
+                <span class="spec-label">Modelo:</span>
+                <span class="spec-valor">Optiplex 7080</span>
+            </div>
+            <hr class="spec-divisor">
+ 
+            <div class="spec-fila">
+                <span class="spec-label">Procesador:</span>
+                <span class="spec-valor">Intel Core i5-10400</span>
+            </div>
+            <hr class="spec-divisor">
+ 
+            <div class="spec-fila">
+                <span class="spec-label">Memoria Ram:</span>
+                <span class="spec-valor">16 GB DDR4</span>
+            </div>
+            <hr class="spec-divisor">
+ 
+            <div class="spec-fila">
+                <span class="spec-label">Numero de Serie</span>
+                <span class="spec-valor">163123</span>
+            </div>
+            <hr class="spec-divisor">
+ 
+            <div class="spec-fila">
+                <span class="spec-label">Disco Duro:</span>
+                <span class="spec-valor">512 GB SSD</span>
+            </div>
+            <hr class="spec-divisor">
+ 
+            <div class="spec-fila">
+                <span class="spec-label">Sistema Operativo:</span>
+                <span class="spec-valor">Windows 11 Pro</span>
+            </div>
+            <hr class="spec-divisor">
+ 
+            <div class="spec-fila">
+                <span class="spec-label">Fecha de Compra:</span>
+                <span class="spec-valor">2/febrero/2026</span>
+            </div>
+            <hr class="spec-divisor">
+ 
+            <div class="spec-fila">
+                <span class="spec-label">Estado de Equipo:</span>
+                <span class="spec-valor">Activo</span>
+            </div>
+ 
+            <!--Botones inferiores-->
+            <div class="botones-grupo">
+                <a href="#" class="btn-finalizar">Finalizar asignacion</a>
+                <!--boton que abre el popup de mantenimiento-->
+                <a href="#popup-mantenimiento" class="btn-mantenimiento">Historial de Mantenimiento</a>
+            </div>
+ 
+        </div>
+    </div>
+ 
+</body>
+</html>
