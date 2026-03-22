@@ -372,15 +372,13 @@ body {
     padding: 6px 4px;
 }
 
-/* Popup usuario - arriba a la derecha */
 #popup-usuario {
     padding-top: 60px;
     padding-right: 20px;
 }
 
-/* Popup mantenimiento - junto al botón */
 #popup-mantenimiento {
-    padding-top: 400px;   /* ← el número que ya te funcionó */
+    padding-top: 400px;
     padding-right: 500px;
 }
 
