@@ -7,53 +7,130 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <h1>Chamoneta Inc</h1>
-            <nav class="nav-buttons">
-                <button class="btn">Agregar equipo</button>
-                <button class="btn">Historial de deportes</button>
-                <button class="btn">Reportes</button>
-            </nav>
-        </header>
 
-        <!-- Main content -->
-        <main class="main-content">
-            <section class="containers-grid">
-                <!-- Container 1 -->
-                <div class="container-card">
-                    <h3>Equipo No.1</h3>
-                    <p class="placeholder">Nombre: [placeholder]</p>
-                    <p class="placeholder">Miembros: [placeholder]</p>
-                    <p class="placeholder">Estado: [placeholder]</p>
-                </div>
-
-                <!-- Container 2 -->
-                <div class="container-card">
-                    <h3>Equipo No.2</h3>
-                    <p class="placeholder">Nombre: [placeholder]</p>
-                    <p class="placeholder">Miembros: [placeholder]</p>
-                    <p class="placeholder">Estado: [placeholder]</p>
-                </div>
-
-                <!-- Container 3 -->
-                <div class="container-card">
-                    <h3>Equipo No.3</h3>
-                    <p class="placeholder">Nombre: [placeholder]</p>
-                    <p class="placeholder">Miembros: [placeholder]</p>
-                    <p class="placeholder">Estado: [placeholder]</p>
-                </div>
-
-                <!-- Container 4 -->
-                <div class="container-card">
-                    <h3>Equipo No.4</h3>
-                    <p class="placeholder">Nombre: [placeholder]</p>
-                    <p class="placeholder">Miembros: [placeholder]</p>
-                    <p class="placeholder">Estado: [placeholder]</p>
-                </div>
-            </section>
-        </main>
+   
+    <nav class="navbar">
+        <button class="btn-agregar">+ Agregar equipo</button>
+ 
+        <!-- Enlace que activa el popup historial con :target -->
+        <a href="#popup-historial" class="nav-title">Historial de Reportes</a>
+ 
+        <!-- Enlace que activa el popup usuario con :target -->
+        <a href="#popup-usuario" class="nav-user">
+            <div class="nav-avatar">SM</div>
+            <div class="nav-info">
+                <span class="nav-name">Santiago Mogollán Cuevas</span>
+                <span class="nav-role">Admin</span>
+            </div>
+        </a>
+    </nav>
+ 
+    <!-- popup de historial de reportes -->
+    <div class="popup-overlay" id="popup-historial">
+        <a href="#" class="popup-fondo"></a>
+        <div class="popup-caja">
+            <a href="#" class="popup-cerrar">✕</a>
+            <table class="historial-table">
+                <thead>
+                    <tr>
+                        <th>No. Inventario</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Procesador</th>
+                        <th>Ram</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Equipo No.1</td><td>Dell</td><td>Optiplex 7080</td><td>i5-10400</td><td>16GB</td><td>Activo</td></tr>
+                    <tr><td>Equipo No.4</td><td>HP</td><td>EliteDesk 800</td><td>i7-9700</td><td>16GB</td><td>Activo</td></tr>
+                    <tr><td>Equipo No.6</td><td>Lenovo</td><td>ThinkCentre M720</td><td>i5-9500</td><td>8GB</td><td>Activo</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+ 
+    <!-- popupd de usuario -->
+    <div class="popup-overlay" id="popup-usuario">
+        <a href="#" class="popup-fondo"></a>
+        <div class="popup-caja popup-caja--usuario">
+            <a href="#" class="popup-cerrar">✕</a>
+            <div class="popup-user-header">
+                <div class="popup-avatar">SM</div>
+                <div>
+                    <p class="popup-user-name">Santiago Mogollán Cuevas</p>
+                    <p class="popup-user-role">Admin</p>
+                </div>
+            </div>
+            <!-- cerrar sesion -->
+            <a href="login.html" class="btn-cerrar-sesion">Cerrar Sesión</a>
+        </div>
+    </div>
+ 
+    <!-- todos los equipos -->
+     <main class="grid-container">
+ 
+        <a href="computadora.html" class="equipo-card">
+            <div class="equipo-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none"><rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/><rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/><rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/><rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/><rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/><rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/><circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/></svg></div>
+            <div class="equipo-info"><h3>Equipo No.1</h3><p>Pc asignada a Pepito de Comercio</p><p>14/marzo/2026</p><span class="badge activo">Activo</span></div>
+        </a>
+ 
+        <a href="computadora.html" class="equipo-card">
+            <div class="equipo-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none"><rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/><rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/><rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/><rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/><rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/><rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/><circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/></svg></div>
+            <div class="equipo-info"><h3>Equipo No.2</h3><p>Pc asignada a Tadeo de Markething</p><p>14/marzo/2026</p><span class="badge mantenimiento">En mantenimiento</span></div>
+        </a>
+ 
+        <a href="computadora.html" class="equipo-card">
+            <div class="equipo-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none"><rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/><rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/><rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/><rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/><rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/><rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/><circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/></svg></div>
+            <div class="equipo-info"><h3>Equipo No.3</h3><p>Pc asignada a Gema de Administracion</p><p>------------</p><span class="badge baja">Dado de baja</span></div>
+        </a>
+ 
+        <a href="computadora.html" class="equipo-card">
+            <div class="equipo-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none"><rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/><rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/><rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/><rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/><rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/><rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/><circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/></svg></div>
+            <div class="equipo-info"><h3>Equipo No.4</h3><p>Pc asignada a Gema de Administracion</p><p>------------</p><span class="badge activo">Activo</span></div>
+        </a>
+ 
+        <a href="computadora.html" class="equipo-card">
+            <div class="equipo-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none"><rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/><rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/><rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/><rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/><rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/><rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/><circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/></svg></div>
+            <div class="equipo-info"><h3>Equipo No.5</h3><p>Pc asignada a Tadeo de Markething</p><p>14/marzo/2026</p><span class="badge mantenimiento">En mantenimiento</span></div>
+        </a>
+ 
+        <a href="computadora.html" class="equipo-card">
+            <div class="equipo-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none"><rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/><rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/><rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/><rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/><rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/><rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/><circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/></svg></div>
+            <div class="equipo-info"><h3>Equipo No.6</h3><p>Pc asignada a Pepito de Comercio</p><p>14/marzo/2026</p><span class="badge activo">Activo</span></div>
+        </a>
+ 
+        <a href="computadora.html" class="equipo-card">
+            <div class="equipo-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none"><rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/><rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/><rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/><rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/><rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/><rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/><circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/></svg></div>
+            <div class="equipo-info"><h3>Equipo No.7</h3><p>Pc asignada a Pepito de Comercio</p><p>14/marzo/2026</p><span class="badge activo">Activo</span></div>
+        </a>
+ 
+        <a href="computadora.html" class="equipo-card">
+            <div class="equipo-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none"><rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/><rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/><rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/><rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/><rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/><rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/><circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/></svg></div>
+            <div class="equipo-info"><h3>Equipo No.8</h3><p>Pc asignada a Pepito de Comercio</p><p>14/marzo/2026</p><span class="badge activo">Activo</span></div>
+        </a>
+ 
+        <a href="computadora.html" class="equipo-card">
+            <div class="equipo-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none"><rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/><rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/><rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/><rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/><rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/><rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/><circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/></svg></div>
+            <div class="equipo-info"><h3>Equipo No.9</h3><p>Pc asignada a Gema de Administracion</p><p>------------</p><span class="badge baja">Dado de baja</span></div>
+        </a>
+ 
+        <a href="computadora.html" class="equipo-card">
+            <div class="equipo-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none"><rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/><rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/><rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/><rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/><rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/><rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/><circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/></svg></div>
+            <div class="equipo-info"><h3>Equipo No.10</h3><p>Pc asignada a Pepito de Comercio</p><p>14/marzo/2026</p><span class="badge activo">Activo</span></div>
+        </a>
+ 
+        <a href="computadora.html" class="equipo-card">
+            <div class="equipo-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none"><rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/><rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/><rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/><rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/><rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/><rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/><circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/></svg></div>
+            <div class="equipo-info"><h3>Equipo No.11</h3><p>Pc asignada a Pepito de Comercio</p><p>14/marzo/2026</p><span class="badge activo">Activo</span></div>
+        </a>
+ 
+        <a href="computadora.html" class="equipo-card">
+            <div class="equipo-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" fill="none"><rect x="8" y="4" width="50" height="34" rx="3" fill="white" fill-opacity="0.5" stroke="white" stroke-width="2"/><rect x="12" y="8" width="42" height="26" rx="1" fill="white" fill-opacity="0.3"/><rect x="26" y="38" width="14" height="6" fill="white" fill-opacity="0.5"/><rect x="18" y="44" width="30" height="3" rx="1" fill="white" fill-opacity="0.5"/><rect x="62" y="10" width="12" height="28" rx="2" fill="white" fill-opacity="0.4" stroke="white" stroke-width="1.5"/><rect x="64" y="13" width="8" height="4" rx="1" fill="white" fill-opacity="0.3"/><circle cx="66" cy="32" r="2" fill="white" fill-opacity="0.6"/></svg></div>
+            <div class="equipo-info"><h3>Equipo No.12</h3><p>Pc asignada a Pepito de Comercio</p><p>14/marzo/2026</p><span class="badge activo">Activo</span></div>
+        </a>
+ 
+    </main>
+ 
 </body>
 </html>
