@@ -79,3 +79,9 @@ app.listen(port, () => {
     console.log(`Escuchando el puerto ${port} 
     Entra a la pagina principal desde aqui http://localhost:3000`)
 })
+
+module.exports = {
+
+    crearConexion: crearConexion
+
+}
