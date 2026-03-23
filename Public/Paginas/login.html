@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Uca Eats!</title>
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="/Paginas/login.css">
 </head>
 <body>
 
@@ -13,7 +13,7 @@
     </div>
  
     <div class="login-container">
- 
+        <form action="/login" method="POST">
         <div class="field-group">
             <svg class="field-svg" xmlns="http://www.w3.org/2000/svg" fill="none"
                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4">
@@ -23,7 +23,7 @@
             <div class="field-content">
                 <label for="username">ID_Usuario</label>
                 <input type="text" id="username" name="username"
-                       value="" autocomplete="username"/>
+                       value="" autocomplete="username" pattern="[a-zA-Z0-9]+" title="Solo letras y números" required/>
             </div>
         </div>
  
@@ -36,13 +36,19 @@
             <div class="field-content">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password"
-                       autocomplete="current-password"/>
+                       autocomplete="current-password" pattern="[a-zA-Z0-9]+" title="Solo letras y números" required/>
             </div>
         </div>
  
-        <button class="btn-entrar" onclick="window.location.href='main.html'">Entrar</button>
- 
+        <button class="btn-entrar" type="submit">Entrar</button>
+    </form>
     </div>
+    //mensaje de error 
+    <script>
+        const params = new URLSearchParams(window.location.search)
+        const error = params.get('error')
+        if (error === 'credenciales') alert('Usuario o contraseña incorrectos')
+    </script>
  
 </body>
 </html>

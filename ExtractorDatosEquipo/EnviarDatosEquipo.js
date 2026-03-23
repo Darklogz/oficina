@@ -35,7 +35,7 @@ async function main() {
         try {
             //Insertar datos a la tabla equipos
             //await conexionBd.query(
-               //'INSERT INTO equipos (Nombre, Marca, Modelo, Ram, Cpu, Almacenamineto, SistemaOperativo, FechaAdquisision, Estado_equipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+               //'INSERT INTO equipos () VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 //[serialN, pcBrand, pcModel, cantRam, cpuModel, cantDisk, Os, new Date(), 1]
             //)
             //console.log('Datos insertados correctamente')
@@ -60,13 +60,5 @@ async function main() {
 }
 main()
 
-
-
-
-module.exports = {
-
-    main:main
-
-}
 
 
