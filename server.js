@@ -1,7 +1,7 @@
 const express = require('express')
 const dotenv = require('dotenv')
-const mysql = require('mysql2/promise')
 const path = require('path')
+const mysql = require('mysql2/promise')
 
 //crea el sevidor
 const app = express()
@@ -24,7 +24,7 @@ async function crearConexion(mysql) {
 }
 
 //variable para los queries
-let consultas = await crearConexion(mysql);
+
 
 //Deshabilitamos la transmicion informacion confidencial de el servidor para mas seguridad
 app.disable('x-powered-by')
@@ -41,8 +41,16 @@ app.get('/',(req,res) =>{
     res.sendFile(path.join(__dirname, 'Public','Paginas','login.html'))
 })
 
+app.get('/PaginaAdmin',(req,res) =>{
+    //tipo de contenido que se envia
+    res.contentType('text/html')
+    res.sendFile(path.join(__dirname, 'Public','Paginas','computadora.html'))
+})
+
 //logica para el inicio de sesion
 app.post('/login',async (req,res)=>{
+    let consultas = await crearConexion(mysql);
+    
     //trae los datos de el form
     const { username, password } = req.body
     //extrae solo el arreglo sin metadatos y realiza la consulta
@@ -51,11 +59,10 @@ app.post('/login',async (req,res)=>{
         [username, password]
     )
 
-    if (!usuario) {
-       return res.json({ mensaje: 'Usuario o contraseña incorrectos' })
-    }else{
-        res.json({ mensaje: 'Login exitoso' })
-    }
+    if (!usuario) return res.redirect('/?error=credenciales')
+    if (!usuario.admin) return res.redirect('/nouser')
+    res.redirect('/PaginaAdmin')
+
 })
 
 //Funciona como HANDLER para cuando no se encuentra cierta direccion
