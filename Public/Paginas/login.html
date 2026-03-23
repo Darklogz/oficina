@@ -23,7 +23,7 @@
             <div class="field-content">
                 <label for="username">ID_Usuario</label>
                 <input type="text" id="username" name="username"
-                       value="" autocomplete="username"/>
+                       value="" autocomplete="username" pattern="[a-zA-Z0-9]+" title="Solo letras y números" required/>
             </div>
         </div>
  
@@ -36,13 +36,19 @@
             <div class="field-content">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password"
-                       autocomplete="current-password"/>
+                       autocomplete="current-password" pattern="[a-zA-Z0-9]+" title="Solo letras y números" required/>
             </div>
         </div>
  
         <button class="btn-entrar" type="submit">Entrar</button>
     </form>
     </div>
+    //mensaje de error 
+    <script>
+        const params = new URLSearchParams(window.location.search)
+        const error = params.get('error')
+        if (error === 'credenciales') alert('Usuario o contraseña incorrectos')
+    </script>
  
 </body>
 </html>
