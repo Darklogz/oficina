@@ -44,7 +44,7 @@ app.get('/',(req,res) =>{
 app.get('/PaginaAdmin',(req,res) =>{
     //tipo de contenido que se envia
     res.contentType('text/html')
-    res.sendFile(path.join(__dirname, 'Public','Paginas','computadora.html'))
+    res.sendFile(path.join(__dirname, 'Public','Paginas','main.html'))
 })
 
 //logica para el inicio de sesion
