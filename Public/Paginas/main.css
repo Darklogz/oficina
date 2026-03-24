@@ -313,9 +313,9 @@ body {
     padding-right: 20px;
 }
 
-.badge.activo        { background-color: #22c55e; color: #ffffff; }
-.badge.mantenimiento { background-color: #f59e0b; color: #ffffff; }
-.badge.baja          { background-color: #ef4444; color: #ffffff; }
+.badge.Activo        { background-color: #22c55e; color: #ffffff; }
+.badge.Mantenimiento { background-color: #f59e0b; color: #ffffff; }
+.badge.Baja          { background-color: #ef4444; color: #ffffff; }
 
 
 @media (max-width: 1024px) {
