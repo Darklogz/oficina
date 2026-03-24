@@ -52,7 +52,8 @@ app.get('/',(req,res) =>{
     res.sendFile(path.join(__dirname, 'Public','Paginas','login.html'))
 })
 
-app.get('/PaginaAdmin',(req,res) =>{
+app.get('/PaginaAdmin',async (req,res) =>{
+
     //tipo de contenido que se envia
     res.contentType('text/html')
     res.sendFile(path.join(__dirname, 'Public','Paginas','main.html'))
@@ -78,6 +79,20 @@ app.post('/login',async (req,res)=>{
     res.redirect('/PaginaAdmin')
 
 })
+
+app.get('/PaginaAdmin/TablaEquipos',async (req,res)=>{
+    
+    let conexion = await crearConexion(mysql)
+    let [tabla] = await conexion.query('SELECT equipos.id_equipos,equipos.nombre_equipo,equipos.marca,equipos.modelo_equipo,equipos.fecha_adquisicion,estado_equipos.nombre AS estado FROM equipos JOIN estado_equipos ON equipos.estado_id = estado_equipos.id_estado;')
+    res.json(tabla);
+    
+    
+        res.status(500)
+        res.send('Ups... algo fallo en la obtencion de los equipos')
+   
+
+})
+
 
 //envia los datos de la sesion
 app.get('/sesion', (req, res) => {
