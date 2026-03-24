@@ -1,14 +1,16 @@
-const express = require('express')
 const dotenv = require('dotenv')
+const express = require('express')
 const path = require('path')
 const mysql = require('mysql2/promise')
 
-//crea el sevidor
-const app = express()
 //Extrae los datos necesarios de el archivo .env
 dotenv.config()
 
-const port = process.env.PORT
+//crea el sevidor
+const app = express()
+
+
+const port = process.env.PORT 
 
 //conexion con la base de datos
 
