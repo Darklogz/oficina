@@ -17,9 +17,9 @@
  
         <!-- Enlace que activa el popup usuario con :target -->
         <a href="#popup-usuario" class="nav-user">
-            <div class="nav-avatar">SM</div>
+            <div class="nav-avatar" id="nav-iniciales"></div>
             <div class="nav-info">
-                <span class="nav-name">Santiago Mogollán Cuevas</span>
+                <span class="nav-name" id="nav-nombre"></span>
                 <span class="nav-role">Admin</span>
             </div>
         </a>
@@ -56,14 +56,14 @@
         <div class="popup-caja popup-caja--usuario">
             <a href="#" class="popup-cerrar">✕</a>
             <div class="popup-user-header">
-                <div class="popup-avatar">SM</div>
+                <div class="popup-avatar" id="popup-iniciales"></div>
                 <div>
-                    <p class="popup-user-name">Santiago Mogollán Cuevas</p>
+                    <p class="popup-user-name" id="popup-nombre"></p>
                     <p class="popup-user-role">Admin</p>
                 </div>
             </div>
             <!--cerrar sesion-->
-            <a href="login.html" class="btn-cerrar-sesion">Cerrar Sesión</a>
+            <a href="/logout" class="btn-cerrar-sesion">Cerrar Sesión</a>
         </div>
     </div>
  
@@ -131,6 +131,30 @@
         </a>
  
     </main>
- 
+
+    <script>
+        async function cargarUsuario() {
+            const respuesta = await fetch('/sesion')
+            const datos = await respuesta.json()
+
+            if (datos.usuario) {
+                document.getElementById('nav-nombre').textContent = datos.usuario
+                document.getElementById('popup-nombre').textContent=datos.usuario
+
+                // Genera las iniciales a partir del nombre
+                const iniciales = datos.usuario
+                    .split(' ')
+                    .map(palabra => palabra[0])
+                    .join('')
+                    .substring(0, 2)
+                    .toUpperCase()
+
+                document.getElementById('nav-iniciales').textContent = iniciales
+                document.getElementById('popup-iniciales').textContent = iniciales
+            }
+        }
+
+        cargarUsuario()
+    </script>
 </body>
 </html>
