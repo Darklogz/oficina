@@ -86,7 +86,7 @@ app.get('/sesion', (req, res) => {
 app.get('/logout',(req,res)=>{
     req.session.destroy()
     res.status(303)
-    res.redirect('')
+    res.redirect('/')
 })
 
 
