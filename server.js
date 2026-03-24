@@ -2,6 +2,7 @@ const dotenv = require('dotenv')
 const express = require('express')
 const path = require('path')
 const mysql = require('mysql2/promise')
+const session = require('express-session')
 
 //Extrae los datos necesarios de el archivo .env
 dotenv.config()
@@ -25,15 +26,23 @@ async function crearConexion(mysql) {
     return conexion
 }
 
-//variable para los queries
-
 
 //Deshabilitamos la transmicion informacion confidencial de el servidor para mas seguridad
 app.disable('x-powered-by')
 //Para poder manejar formularios html
 app.use(express.urlencoded({ extended: true }))
+
+//Manejar la sesion de los usuarios
+app.use(session({
+    secret: 'mongollongos',
+    resave: false,
+    saveUninitialized: false
+}))
 //Sirve los archivos de la carpeta Public para poder ser utilizaos en el servidor
 app.use(express.static(__dirname +'/Public'))
+
+
+
 
 
 //Al no especificar direccion alguna cae aqui
@@ -63,9 +72,23 @@ app.post('/login',async (req,res)=>{
 
     if (!usuario) return res.redirect('/?error=credenciales')
     if (!usuario.admin) return res.redirect('/nouser')
+
+    req.session.usuario = usuario.usuario
+    res.status(303)
     res.redirect('/PaginaAdmin')
 
 })
+
+//envia los datos de la sesion
+app.get('/sesion', (req, res) => {
+    res.json({ usuario: req.session.usuario })
+})
+app.get('/logout',(req,res)=>{
+    req.session.destroy()
+    res.status(303)
+    res.redirect('')
+})
+
 
 //Funciona como HANDLER para cuando no se encuentra cierta direccion
 app.use((req, res) => {
