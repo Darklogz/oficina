@@ -275,7 +275,7 @@
             if (asignacion) {
                 //codigo si el equipo esta asignado
                 boton.textContent = 'Finalizar asignacion'
-                TextoEmp.textContent=`${asignacion.nombre}`
+                TextoEmp.textContent=`${asignacion.nombre_empleado}`
                 TextoFecha.textContent=`${asignacion.fecha_asignacion}`
                 boton.addEventListener('click', async (e) => {
                     e.preventDefault()

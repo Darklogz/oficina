@@ -139,10 +139,10 @@ app.get('/PagComputadora/Asignacion', async (req, res) => {
     const { id } = req.query
     let consultas = await crearConexion(mysql)
     const [[asignacion]] = await consultas.query(
-       `SELECT asignaciones.*, empleados.nombre 
+       `SELECT asignaciones.*, empleados.nombre_empleado
          FROM asignaciones 
-         JOIN empleados ON asignaciones.empleado_id = empleados.id_empleados
-         WHERE asignaciones.equipo_id = ? AND Asignaciones.fecha_fin IS NULL`,
+         JOIN empleados ON asignaciones.empleado_id = empleados.id_empleado
+         WHERE asignaciones.equipo_id = ? AND asignaciones.fecha_fin IS NULL`,
         [id]
     )
     res.json(asignacion || null)
