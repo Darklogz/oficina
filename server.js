@@ -52,6 +52,7 @@ app.get('/',(req,res) =>{
     res.sendFile(path.join(__dirname, 'Public','Paginas','login.html'))
 })
 
+//Ruta para mostrar la pagina con todos los equipos
 app.get('/PaginaAdmin',async (req,res) =>{
 
     //tipo de contenido que se envia
@@ -79,37 +80,57 @@ app.post('/login',async (req,res)=>{
     res.redirect('/PaginaAdmin')
 
 })
-
+//Ruta para enviar a las cuentas que no son administradores a otro lugar
 app.get('/noadmin',(req,res)=>{
     
     res.send('<h1>No tiene acceso a esta pagina , Consulte con su jefe de area</h1>')
 
 })
 
-
+//Consulta que toma tods los equipos y los envia para mostrar en la pagina principal
 app.get('/PaginaAdmin/TablaEquipos',async (req,res)=>{
-    
+    try{
+    //Se obtiene la informacion de los equipos
     let conexion = await crearConexion(mysql)
     let [tabla] = await conexion.query('SELECT equipos.id_equipos,equipos.nombre_equipo,equipos.marca,equipos.modelo_equipo,equipos.fecha_adquisicion,estado_equipos.nombre AS estado FROM equipos JOIN estado_equipos ON equipos.estado_id = estado_equipos.id_estado;')
     res.json(tabla);
-    
-    
+    }
+    catch(err){
         res.status(500)
-        res.send('Ups... algo fallo en la obtencion de los equipos')
-   
-
+        res.send('Ups... algo fallo en la obtencion de los equipos',err)
+    }
+        
 })
-
 
 //envia los datos de la sesion
 app.get('/sesion', (req, res) => {
     res.json({ usuario: req.session.usuario })
 })
-
+//Maneja el cierre de sesion
 app.get('/logout',(req,res)=>{
     req.session.destroy()
     res.status(303)
     res.redirect('/')
+})
+//Ruta para mostra la pagina indivual de los equipos
+app.get('/PagComputadora',(req,res)=>{
+
+    res.contentType('text/html')
+    res.sendFile(path.join(__dirname, 'Public','Paginas','computadora.html'))
+
+})
+
+//Consulta que envia los datos de los equipos a la pagina
+app.get('/PagComputadora/DatosEquipo',async (req,res)=>{
+
+    const { id } = req.query
+    let consultas = await crearConexion(mysql)
+    const [[equipo]] = await consultas.query(
+        `SELECT equipos.*,estado_equipos.nombre AS estado FROM equipos JOIN estado_equipos ON equipos.estado_id = estado_equipos.id_estado WHERE equipos.id_equipos = ?`,
+        [id]
+    )
+    res.json(equipo)
+
 })
 
 
