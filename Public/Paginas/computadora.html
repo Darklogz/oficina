@@ -9,7 +9,7 @@
 <body>
  
     <nav class="navbar">
-        <a href="/" class="btn-regresar">← Regresar a equipos</a>
+        <a href="/PaginaAdmin" class="btn-regresar">← Regresar a equipos</a>
         <a href="#popup-usuario" class="nav-user">
             <div class="nav-avatar" id="nav-iniciales"></div>
             <div class="nav-info">
@@ -251,9 +251,9 @@
                     <div class="mant-registro">
                         <p class="mant-fecha">${new Date(mant.fecha_mantenimiento).toLocaleDateString()}</p>
                         <hr class="mant-linea">
-                        <p class="mant-dato">${mant.tipo_mantenimiento}</p>
+                        <p class="mant-dato"><b>Tipo:</b> ${mant.tipo_mantenimiento}</p>
                         <hr class="mant-linea">
-                        <p class="mant-dato">${mant.descripcion}</p>
+                        <p class="mant-dato"><b>Descripcion:</b> ${mant.descripcion}</p>
                     </div>
                 `
             })
