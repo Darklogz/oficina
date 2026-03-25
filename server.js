@@ -112,6 +112,8 @@ app.get('/logout',(req,res)=>{
     res.status(303)
     res.redirect('/')
 })
+
+
 //Ruta para mostra la pagina indivual de los equipos
 app.get('/PagComputadora',(req,res)=>{
 
@@ -133,6 +135,16 @@ app.get('/PagComputadora/DatosEquipo',async (req,res)=>{
 
 })
 
+app.get('/PagComputadora/HistorialM',async (req,res)=>{
+
+    const { id } = req.query
+    let consultas = await crearConexion(mysql)
+    const [mantenimientos] = await consultas.query(
+        `SELECT fecha_mantenimiento,tipo_mantenimiento,descripcion FROM historial_mantenimientos WHERE equipo_id= ? ORDER BY fecha_mantenimiento DESC LIMIT 3 `,
+        [id]
+    )
+    res.json(mantenimientos)
+})
 
 //Funciona como HANDLER para cuando no se encuentra cierta direccion
 app.use((req, res) => {
