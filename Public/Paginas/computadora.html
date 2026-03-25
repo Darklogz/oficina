@@ -236,7 +236,6 @@
 
             const respuesta = await fetch(`/PagComputadora/HistorialM?id=${id}`)
             const mantenimientos = await respuesta.json()
-            console.log(mantenimientos)
 
             const container = document.getElementById('historial-container')
             container.innerHTML = ''
@@ -276,6 +275,8 @@
             if (asignacion) {
                 //codigo si el equipo esta asignado
                 boton.textContent = 'Finalizar asignacion'
+                TextoEmp.textContent=`${asignacion.nombre}`
+                TextoFecha.textContent=`${asignacion.fecha_asignacion}`
                 boton.addEventListener('click', async (e) => {
                     e.preventDefault()
                     await fetch('/PagComputadora/FinalizarAsignacion', {
