@@ -134,7 +134,28 @@ app.get('/PagComputadora/DatosEquipo',async (req,res)=>{
     res.json(equipo)
 
 })
-
+//Consulta para verificar si el equipo esta asignado o no
+app.get('/PagComputadora/Asignacion', async (req, res) => {
+    const { id } = req.query
+    let consultas = await crearConexion(mysql)
+    const [[asignacion]] = await consultas.query(
+        `SELECT * FROM asignaciones 
+         WHERE equipo_id = ? AND fecha_fin IS NULL`,
+        [id]
+    )
+    res.json(asignacion || null)
+})
+//Consulta para terminar la asignacion
+app.post('/PagComputadora/FinalizarAsignacion', async (req, res) => {
+    const { id } = req.body
+    let consultas = await crearConexion(mysql)
+    await consultas.query(
+        `UPDATE asignaciones SET fecha_fin = NOW() 
+         WHERE equipo_id = ? AND fecha_fin IS NULL`,
+        [id]
+    )
+    res.json({ mensaje: 'Asignacion finalizada' })
+})
 app.get('/PagComputadora/HistorialM',async (req,res)=>{
 
     const { id } = req.query

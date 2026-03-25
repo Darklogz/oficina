@@ -82,7 +82,7 @@
                     </svg>
                     Empleado Asignado
                 </p>
-                <p class="info-valor-grande">Pepito</p>
+                <p class="info-valor-grande" id="NombreEmp"></p>
             </div>
  
             <hr class="divisor">
@@ -98,7 +98,7 @@
                     </svg>
                     Fecha
                 </p>
-                <p class="info-valor-grande">14/marzo/2026</p>
+                <p class="info-valor-grande" id="FechaEmpAsignado"></p>
             </div>
  
             <!--generar reporte-->
@@ -260,7 +260,43 @@
         }
         document.querySelector('a[href="#popup-mantenimiento"]').addEventListener('click', cargarMantenimientos)
     </script>
+    <!--Script para boton asignacion-->
+    <script>
+        async function verificarAsignacion() {
+            const params = new URLSearchParams(window.location.search)
+            const id = params.get('id')
 
+            const respuesta = await fetch(`/PagComputadora/Asignacion?id=${id}`)
+            const asignacion = await respuesta.json()
+
+            const boton = document.querySelector('.btn-finalizar')
+            const TextoEmp = document.getElementById('NombreEmp')
+            const TextoFecha = document.getElementById('FechaEmpAsignado')
+            //condcional para verificar el estado de asignacion de el equipo
+            if (asignacion) {
+                //codigo si el equipo esta asignado
+                boton.textContent = 'Finalizar asignacion'
+                boton.addEventListener('click', async (e) => {
+                    e.preventDefault()
+                    await fetch('/PagComputadora/FinalizarAsignacion', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    })
+                    verificarAsignacion() 
+                })
+            } else {
+                //codigo si el equipo no esta asignado
+                boton.textContent = 'Asignar equipo'
+                TextoEmp.textContent = 'Sin asignar'
+                TextoFecha.textContent= ''
+                
+            }
+        }
+
+        verificarAsignacion()
+
+    </script>
 
 </body>
 </html>
