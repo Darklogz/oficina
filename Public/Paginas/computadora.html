@@ -11,9 +11,9 @@
     <nav class="navbar">
         <a href="main.html" class="btn-regresar">← Regresar a equipos</a>
         <a href="#popup-usuario" class="nav-user">
-            <div class="nav-avatar">SM</div>
+            <div class="nav-avatar" id="nav-iniciales"></div>
             <div class="nav-info">
-                <span class="nav-name">Santiago Mogollán Cuevas</span>
+                <span class="nav-name" id="nav-nombre"></span>
                 <span class="nav-role">Admin</span>
             </div>
         </a>
@@ -25,13 +25,13 @@
         <div class="popup-caja popup-caja--usuario">
             <a href="#" class="popup-cerrar">✕</a>
             <div class="popup-user-header">
-                <div class="popup-avatar">SM</div>
+                <div class="popup-avatar" id="popup-iniciales"></div>
                 <div>
-                    <p class="popup-user-name">Santiago Mogollán Cuevas</p>
+                    <p class="popup-user-name" id="popup-nombre"></p>
                     <p class="popup-user-role">Admin</p>
                 </div>
             </div>
-            <a href="login.html" class="btn-cerrar-sesion">Cerrar Sesión</a>
+            <a href="/logout" class="btn-cerrar-sesion">Cerrar Sesión</a>
         </div>
     </div>
  
@@ -124,61 +124,61 @@
  
             <div class="spec-fila">
                 <span class="spec-label">No.Inventario:</span>
-                <span class="spec-valor">PC-001</span>
+                <span class="spec-valor"id="NombreEquipo"></span>
             </div>
             <hr class="spec-divisor">
  
             <div class="spec-fila">
                 <span class="spec-label">Marca:</span>
-                <span class="spec-valor">Dell</span>
+                <span class="spec-valor" id="MarcaEquipo"></span>
             </div>
             <hr class="spec-divisor">
  
             <div class="spec-fila">
                 <span class="spec-label">Modelo:</span>
-                <span class="spec-valor">Optiplex 7080</span>
+                <span class="spec-valor" id="ModeloEquipo"></span>
             </div>
             <hr class="spec-divisor">
  
             <div class="spec-fila">
                 <span class="spec-label">Procesador:</span>
-                <span class="spec-valor">Intel Core i5-10400</span>
+                <span class="spec-valor" id="ModeloProcesador"></span>
             </div>
             <hr class="spec-divisor">
  
             <div class="spec-fila">
                 <span class="spec-label">Memoria Ram:</span>
-                <span class="spec-valor">16 GB DDR4</span>
+                <span class="spec-valor" id="Ram"></span>
             </div>
             <hr class="spec-divisor">
  
             <div class="spec-fila">
                 <span class="spec-label">Numero de Serie</span>
-                <span class="spec-valor">163123</span>
+                <span class="spec-valor" id="NumeroSerie"></span>
             </div>
             <hr class="spec-divisor">
  
             <div class="spec-fila">
                 <span class="spec-label">Disco Duro:</span>
-                <span class="spec-valor">512 GB SSD</span>
+                <span class="spec-valor" id="Disco">    </span>
             </div>
             <hr class="spec-divisor">
  
             <div class="spec-fila">
                 <span class="spec-label">Sistema Operativo:</span>
-                <span class="spec-valor">Windows 11 Pro</span>
+                <span class="spec-valor" id="Os"></span>
             </div>
             <hr class="spec-divisor">
  
             <div class="spec-fila">
                 <span class="spec-label">Fecha de Compra:</span>
-                <span class="spec-valor">2/febrero/2026</span>
+                <span class="spec-valor" id="Fecha"></span>
             </div>
             <hr class="spec-divisor">
  
             <div class="spec-fila">
                 <span class="spec-label">Estado de Equipo:</span>
-                <span class="spec-valor">Activo</span>
+                <span class="spec-valor" id="Estado"></span>
             </div>
  
             <!--Botones inferiores-->
@@ -190,6 +190,56 @@
  
         </div>
     </div>
- 
+    <!-- Traer datos de usuario-->
+    <script>
+        async function cargarUsuario() {
+            const respuesta = await fetch('/sesion')
+            const datos = await respuesta.json()
+
+            if (datos.usuario) {
+                document.getElementById('nav-nombre').textContent = datos.usuario
+                document.getElementById('popup-nombre').textContent=datos.usuario
+
+                // Genera las iniciales a partir del nombre
+                const iniciales = datos.usuario
+                    .split(' ')
+                    .map(palabra => palabra[0])
+                    .join('')
+                    .substring(0, 2)
+                    .toUpperCase()
+
+                document.getElementById('nav-iniciales').textContent = iniciales
+                document.getElementById('popup-iniciales').textContent = iniciales
+            }
+        }
+        cargarUsuario()
+    </script>
+    <!--Script principal, Mostrar datos de equipos-->
+    <script>
+        async function cargarEquipo() {
+            // Lee el id de la URL
+            const params = new URLSearchParams(window.location.search)
+            const id = params.get('id')
+
+            // Pide los datos al servidor
+            const respuesta = await fetch(`/PagComputadora/DatosEquipo?id=${id}`)
+            const equipo = await respuesta.json()
+
+            // Llena los campos
+            document.getElementById('NombreEquipo').textContent = equipo.nombre_equipo
+            document.getElementById('MarcaEquipo').textContent = equipo.marca
+            document.getElementById('ModeloEquipo').textContent = equipo.modelo_equipo
+            document.getElementById('ModeloProcesador').textContent = equipo.modelo_cpu
+            document.getElementById('Ram').textContent = `${equipo.cantidad_ram_Gb} GB`
+            document.getElementById('NumeroSerie').textContent = equipo.numero_serie
+            document.getElementById('Disco').textContent = `${equipo.almacenamiento} GB`
+            document.getElementById('Os').textContent = equipo.sistema_operativo
+            document.getElementById('Fecha').textContent = new Date(equipo.fecha_adquisicion).toLocaleDateString()
+            document.getElementById('Estado').textContent = equipo.estado
+        }
+
+        cargarEquipo()
+
+    </script>
 </body>
 </html>
