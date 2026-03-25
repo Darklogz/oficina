@@ -72,13 +72,20 @@ app.post('/login',async (req,res)=>{
     )
 
     if (!usuario) return res.redirect('/?error=credenciales')
-    if (!usuario.admin) return res.redirect('/nouser')
+    if (!usuario.admin) return res.redirect('/noadmin')
 
     req.session.usuario = usuario.usuario
     res.status(303)
     res.redirect('/PaginaAdmin')
 
 })
+
+app.get('/noadmin',(req,res)=>{
+    
+    res.send('<h1>No tiene acceso a esta pagina , Consulte con su jefe de area</h1>')
+
+})
+
 
 app.get('/PaginaAdmin/TablaEquipos',async (req,res)=>{
     
@@ -98,6 +105,7 @@ app.get('/PaginaAdmin/TablaEquipos',async (req,res)=>{
 app.get('/sesion', (req, res) => {
     res.json({ usuario: req.session.usuario })
 })
+
 app.get('/logout',(req,res)=>{
     req.session.destroy()
     res.status(303)
