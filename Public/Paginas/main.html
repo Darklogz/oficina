@@ -114,7 +114,7 @@
                         <h3>${equipo.nombre_equipo}</h3>
                         <p>${equipo.marca} </p>
                         <p>${equipo.modelo_equipo}</p>
-                        <p>${equipo.fecha_adquisicion}</p>
+                        <p>${new Date(equipo.fecha_adquisicion).toLocaleDateString()}</p>
                         <span class="badge ${equipo.estado}">${equipo.estado}</span>
                     </div>
                 </a>
