@@ -279,7 +279,7 @@
                 TextoFecha.textContent=`${new Date(asignacion.fecha_asignacion).toLocaleDateString()}`
                 boton.addEventListener('click', async (e) => {
                     e.preventDefault()
-                    await fetch('/PagComputadora/FinalizarAsignacion', {
+                    await fetch(`/PagComputadora/FinalizarAsignacion?id=${id}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id })

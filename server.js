@@ -149,7 +149,7 @@ app.get('/PagComputadora/Asignacion', async (req, res) => {
 })
 //Consulta para terminar la asignacion
 app.post('/PagComputadora/FinalizarAsignacion', async (req, res) => {
-    const { id } = req.body
+    const { id } = req.query
     let consultas = await crearConexion(mysql)
     await consultas.query(
         `UPDATE asignaciones SET fecha_fin = NOW() 
