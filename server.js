@@ -43,21 +43,13 @@ app.use(express.static(__dirname +'/Public'))
 
 
 
+//Aqui empieza la logica de el servidor para el login 
 
-
-//Al no especificar direccion alguna cae aqui
+//Pagina inicial
 app.get('/',(req,res) =>{
     //tipo de contenido que se envia
     res.contentType('text/html')
     res.sendFile(path.join(__dirname, 'Public','Paginas','login.html'))
-})
-
-//Ruta para mostrar la pagina con todos los equipos
-app.get('/PaginaAdmin',async (req,res) =>{
-
-    //tipo de contenido que se envia
-    res.contentType('text/html')
-    res.sendFile(path.join(__dirname, 'Public','Paginas','main.html'))
 })
 
 //logica para el inicio de sesion
@@ -87,6 +79,16 @@ app.get('/noadmin',(req,res)=>{
 
 })
 
+//Apartir de aqui empieza el codigo de la pgaina con todos los equipos
+
+//Ruta para mostrar la pagina con todos los equipos
+app.get('/PaginaAdmin',async (req,res) =>{
+
+    //tipo de contenido que se envia
+    res.contentType('text/html')
+    res.sendFile(path.join(__dirname, 'Public','Paginas','main.html'))
+})
+
 //Consulta que toma tods los equipos y los envia para mostrar en la pagina principal
 app.get('/PaginaAdmin/TablaEquipos',async (req,res)=>{
     try{
@@ -114,6 +116,8 @@ app.get('/logout',(req,res)=>{
 })
 
 
+//Apartir de este punto se encuentra la logica de la pagina con los datos generales del equipo
+
 //Ruta para mostra la pagina indivual de los equipos
 app.get('/PagComputadora',(req,res)=>{
 
@@ -134,6 +138,19 @@ app.get('/PagComputadora/DatosEquipo',async (req,res)=>{
     res.json(equipo)
 
 })
+//GET que toma los datos de los mantenimientos
+app.get('/PagComputadora/HistorialM',async (req,res)=>{
+
+    const { id } = req.query
+    let consultas = await crearConexion(mysql)
+    const [mantenimientos] = await consultas.query(
+        `SELECT fecha_mantenimiento,tipo_mantenimiento,descripcion FROM historial_mantenimientos WHERE equipo_id= ? ORDER BY fecha_mantenimiento DESC LIMIT 3 `,
+        [id]
+    )
+    res.json(mantenimientos)
+})
+
+
 //Consulta para verificar si el equipo esta asignado o no
 app.get('/PagComputadora/Asignacion', async (req, res) => {
     const { id } = req.query
@@ -158,16 +175,12 @@ app.post('/PagComputadora/FinalizarAsignacion', async (req, res) => {
     )
     res.json({ mensaje: 'Asignacion finalizada' })
 })
-app.get('/PagComputadora/HistorialM',async (req,res)=>{
 
-    const { id } = req.query
-    let consultas = await crearConexion(mysql)
-    const [mantenimientos] = await consultas.query(
-        `SELECT fecha_mantenimiento,tipo_mantenimiento,descripcion FROM historial_mantenimientos WHERE equipo_id= ? ORDER BY fecha_mantenimiento DESC LIMIT 3 `,
-        [id]
-    )
-    res.json(mantenimientos)
-})
+
+
+
+
+//Logica de solo servidor
 
 //Funciona como HANDLER para cuando no se encuentra cierta direccion
 app.use((req, res) => {
