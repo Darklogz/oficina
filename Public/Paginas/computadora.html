@@ -96,7 +96,7 @@
                         <line x1="8" y1="2" x2="8" y2="6"/>
                         <line x1="16" y1="2" x2="16" y2="6"/>
                     </svg>
-                    Fecha
+                    Fecha de asignacion
                 </p>
                 <p class="info-valor-grande" id="FechaEmpAsignado"></p>
             </div>
@@ -276,7 +276,7 @@
                 //codigo si el equipo esta asignado
                 boton.textContent = 'Finalizar asignacion'
                 TextoEmp.textContent=`${asignacion.nombre_empleado}`
-                TextoFecha.textContent=`${asignacion.fecha_asignacion}`
+                TextoFecha.textContent=`${new Date(asignacion.fecha_asignacion).toLocaleDateString()}`
                 boton.addEventListener('click', async (e) => {
                     e.preventDefault()
                     await fetch('/PagComputadora/FinalizarAsignacion', {
