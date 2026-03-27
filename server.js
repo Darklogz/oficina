@@ -41,11 +41,11 @@ app.use(session({
 //Sirve los archivos de la carpeta Public para poder ser utilizaos en el servidor
 app.use(express.static(__dirname +'/Public'))
 
-
+app.use(express.json())
 
 //Aqui empieza la logica de el servidor para el login 
 
-//Pagina inicial
+//Ruta para la pagina inicial
 app.get('/',(req,res) =>{
     //tipo de contenido que se envia
     res.contentType('text/html')
@@ -58,15 +58,16 @@ app.post('/login',async (req,res)=>{
     
     //trae los datos de el form
     const { username, password } = req.body
-    //extrae solo el arreglo sin metadatos y realiza la consulta
+    //extrae el arreglo y realiza la consulta
     const [[usuario]] = await consultas.query(
         'SELECT * FROM usuarios WHERE usuario = ? AND contraseña = ?',
         [username, password]
     )
-
+    //mensaje de error para cuentas no registradas
     if (!usuario) return res.redirect('/?error=credenciales')
-    if (!usuario.admin) return res.redirect('/noadmin')
 
+    if (!usuario.admin) return res.redirect('/noadmin')
+    //redireccion a la pagina de admin
     req.session.usuario = usuario.usuario
     res.status(303)
     res.redirect('/PaginaAdmin')
@@ -175,14 +176,34 @@ app.post('/PagComputadora/FinalizarAsignacion', async (req, res) => {
     )
     res.json({ mensaje: 'Asignacion finalizada' })
 })
-
+//consulta para conseguir la lista de empleados para asignar
+app.get('/PagComputadora/ListaEmpleados', async (req, res) => {
+    let consultas = await crearConexion(mysql)
+    const [empleados] = await consultas.query(
+        `SELECT empleados.*,areas.nombre_area AS area 
+        FROM empleados
+        JOIN areas ON empleados.area_id = areas.id_area`
+    )
+    res.json(empleados)
+})
+//Logica para Asignar empleados
+app.post('/PagComputadora/Asignar', async (req, res) => {
+    const { id_equipo, id_empleado } = req.body
+    let consultas = await crearConexion(mysql)
+    await consultas.query(
+        `INSERT INTO asignaciones (equipo_id, empleado_id, fecha_asignacion) 
+         VALUES (?, ?, NOW())`,
+        [id_equipo, id_empleado]
+    )
+    
+})
 
 
 
 
 //Logica de solo servidor
 
-//Funciona como HANDLER para cuando no se encuentra cierta direccion
+//Funciona como receptor de errores para cuando no se encuentra cierta direccion
 app.use((req, res) => {
     res.type('text/plain')
 	res.status(404);

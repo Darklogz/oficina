@@ -170,7 +170,10 @@
  
             <!--Botones inferiores-->
             <div class="botones-grupo">
-                <a href="#" class="btn-finalizar">Finalizar asignacion</a>
+                <a href="#" class="btn-finalizar"></a>
+                <select id="lista-empleados" style="display:none">
+                    <option value="">Selecciona un empleado</option>
+                </select>
                 <!--boton que abre el popup de mantenimiento-->
                 <a href="#popup-mantenimiento" class="btn-mantenimiento">Historial de Mantenimiento</a>
             </div>
@@ -262,6 +265,23 @@
         }
         document.querySelector('a[href="#popup-mantenimiento"]').addEventListener('click', cargarMantenimientos)
     </script>
+
+     <!--Script para cargar la lista de empleados a la pagina-->
+    <script>
+        async function cargarEmpleados() {
+            const respuesta = await fetch('/PagComputadora/ListaEmpleados')
+            const empleados = await respuesta.json()
+
+            const dropdown = document.getElementById('lista-empleados')
+            empleados.forEach(emp => {
+                dropdown.innerHTML += `<option value="${emp.id_empleado}">${emp.nombre_empleado}/${emp.area}</option>`
+            })
+        }
+
+        cargarEmpleados()
+    </script>
+
+
     <!--Script para boton asignacion-->
     <script>
         async function verificarAsignacion() {
@@ -289,18 +309,44 @@
                     })
                     verificarAsignacion() 
                 })
-            } else {
+            } 
+            else {
                 //codigo si el equipo no esta asignado
                 boton.textContent = 'Asignar equipo'
                 TextoEmp.textContent = 'Sin asignar'
                 TextoFecha.textContent= ''
                 
+                const dropdown = document.getElementById('lista-empleados')
+                dropdown.style.display = 'block'
+
+                boton.addEventListener('click', async (e) => {
+                    e.preventDefault()
+
+                    const id_empleado = dropdown.value
+                    if (!id_empleado) {
+                        alert('Selecciona un empleado')
+                        return
+                    }
+
+                    await fetch('/PagComputadora/Asignar', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id_equipo: id, id_empleado })
+                    })
+
+                    dropdown.style.display = 'none'
+                    verificarAsignacion()
+                })
             }
         }
 
         verificarAsignacion()
 
     </script>
+
+   
+
+
 
 </body>
 </html>
