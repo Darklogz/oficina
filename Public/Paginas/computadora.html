@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equipo No.1 - Chamoneta Inc</title>
+    <title>Equipo - Chamoneta Inc</title>
     <link rel="stylesheet" href="/Paginas/computadora.css">
 </head>
 <body>
@@ -52,7 +52,7 @@
     </div>
  
     <div class="pagina-titulo">
-        <h1>Equipo No.1</h1>
+        <h1 id="NumeroEquipo"></h1>
     </div>
  
     <div class="detalle-container">
@@ -211,8 +211,11 @@
             // Pide los datos al servidor
             const respuesta = await fetch(`/PagComputadora/DatosEquipo?id=${id}`)
             const equipo = await respuesta.json()
+            
+            //Asigna un numero en base a la id
+            document.getElementById('NumeroEquipo').textContent=`Equipo No.${id}`
 
-            // Llena los campos
+            // Llena los campos de el equipo
             document.getElementById('NombreEquipo').textContent = equipo.nombre_equipo
             document.getElementById('MarcaEquipo').textContent = equipo.marca
             document.getElementById('ModeloEquipo').textContent = equipo.modelo_equipo
