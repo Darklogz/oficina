@@ -50,6 +50,18 @@
  
         </div>
     </div>
+
+    <!--Popup para editar estado de equipo-->
+    <div class="popup-overlay" id="popup-estado">
+        <a href="#" class="popup-fondo"></a>
+        <div class="popup-caja">
+            <a href="#" class="popup-cerrar">✕</a>
+            <h3>Cambiar Estado</h3>
+            <div id="opciones-estado"></div>
+        </div>
+    </div>
+
+
  
     <div class="pagina-titulo">
         <h1 id="NumeroEquipo"></h1>
@@ -166,6 +178,7 @@
             <div class="spec-fila">
                 <span class="spec-label">Estado de Equipo:</span>
                 <span class="spec-valor" id="Estado"></span>
+                <a href="#popup-estado" class="btn-editar">✏️</a>
             </div>
  
             <!--Botones inferiores-->
@@ -342,6 +355,40 @@
 
         verificarAsignacion()
 
+    </script>
+    <script>
+        async function cargarOpciones() {
+            const params = new URLSearchParams(window.location.search)
+            const id = params.get('id')
+
+            const respuesta = await fetch('/PagComputadoras/EstadosEquipo')
+            const estados = await respuesta.json()
+
+            const container = document.getElementById('opciones-estado')
+            container.innerHTML = ''
+
+            estados.forEach(estado => {
+                container.innerHTML += `
+                    <button class="btn-estado" onclick="cambiarEstado(${estado.id_estado}, ${id})">
+                        ${estado.nombre}
+                    </button>
+                `
+            })
+        }
+
+        async function cambiarEstado(id_estado, id_equipo) {
+            await fetch('/PagComputadoras/CambiarEstado', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_equipo, id_estado })
+            })
+
+            // Cierra el popup y recarga los datos
+            window.location.href = '#'
+            cargarEquipo()
+        }
+
+        document.querySelector('a[href="#popup-estado"]').addEventListener('click', cargarOpciones)
     </script>
 
    

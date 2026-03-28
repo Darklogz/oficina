@@ -32,6 +32,9 @@ app.disable('x-powered-by')
 //Para poder manejar formularios html
 app.use(express.urlencoded({ extended: true }))
 
+app.use(express.json())
+
+
 //Manejar la sesion de los usuarios
 app.use(session({
     secret: 'mongollongos',
@@ -41,7 +44,6 @@ app.use(session({
 //Sirve los archivos de la carpeta Public para poder ser utilizaos en el servidor
 app.use(express.static(__dirname +'/Public'))
 
-app.use(express.json())
 
 //Aqui empieza la logica de el servidor para el login 
 
@@ -95,7 +97,7 @@ app.get('/PaginaAdmin/TablaEquipos',async (req,res)=>{
     try{
     //Se obtiene la informacion de los equipos
     let conexion = await crearConexion(mysql)
-    let [tabla] = await conexion.query('SELECT equipos.id_equipos,equipos.nombre_equipo,equipos.marca,equipos.modelo_equipo,equipos.fecha_adquisicion,estado_equipos.nombre AS estado FROM equipos JOIN estado_equipos ON equipos.estado_id = estado_equipos.id_estado;')
+    let [tabla] = await conexion.query('SELECT equipos.id_equipos,equipos.nombre_equipo,equipos.marca,equipos.modelo_equipo,equipos.fecha_adquisicion,estado_equipos.nombre AS estado FROM equipos JOIN estado_equipos ON equipos.estado_id = estado_equipos.id_estado ORDER BY equipos.id_equipos ASC;')
     res.json(tabla);
     }
     catch(err){
@@ -150,6 +152,22 @@ app.get('/PagComputadora/HistorialM',async (req,res)=>{
     )
     res.json(mantenimientos)
 })
+//Actualiza el estado de el equipo 
+app.post('/PagComputadoras/CambiarEstado',async (req,res)=>{
+    const { id_equipo, id_estado } = req.body
+        let consultas = await crearConexion(mysql)
+        await consultas.query(
+            'UPDATE equipos SET estado_id = ? WHERE id_equipos = ?',
+            [id_estado, id_equipo]
+        )
+})
+//Consulta para traer los estados de el equipo
+app.get('/PagComputadoras/EstadosEquipo', async (req, res) => {
+    let consultas = await crearConexion(mysql)
+    const [estados] = await consultas.query('SELECT * FROM estado_equipos')
+    res.json(estados)
+})
+
 
 
 //Consulta para verificar si el equipo esta asignado o no
