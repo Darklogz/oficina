@@ -32,6 +32,9 @@ app.disable('x-powered-by')
 //Para poder manejar formularios html
 app.use(express.urlencoded({ extended: true }))
 
+app.use(express.json())
+
+
 //Manejar la sesion de los usuarios
 app.use(session({
     secret: 'mongollongos',
@@ -42,22 +45,13 @@ app.use(session({
 app.use(express.static(__dirname +'/Public'))
 
 
+//Aqui empieza la logica de el servidor para el login 
 
-
-
-//Al no especificar direccion alguna cae aqui
+//Ruta para la pagina inicial
 app.get('/',(req,res) =>{
     //tipo de contenido que se envia
     res.contentType('text/html')
     res.sendFile(path.join(__dirname, 'Public','Paginas','login.html'))
-})
-
-//Ruta para mostrar la pagina con todos los equipos
-app.get('/PaginaAdmin',async (req,res) =>{
-
-    //tipo de contenido que se envia
-    res.contentType('text/html')
-    res.sendFile(path.join(__dirname, 'Public','Paginas','main.html'))
 })
 
 //logica para el inicio de sesion
@@ -66,15 +60,16 @@ app.post('/login',async (req,res)=>{
     
     //trae los datos de el form
     const { username, password } = req.body
-    //extrae solo el arreglo sin metadatos y realiza la consulta
+    //extrae el arreglo y realiza la consulta
     const [[usuario]] = await consultas.query(
         'SELECT * FROM usuarios WHERE usuario = ? AND contraseña = ?',
         [username, password]
     )
-
+    //mensaje de error para cuentas no registradas
     if (!usuario) return res.redirect('/?error=credenciales')
-    if (!usuario.admin) return res.redirect('/noadmin')
 
+    if (!usuario.admin) return res.redirect('/noadmin')
+    //redireccion a la pagina de admin
     req.session.usuario = usuario.usuario
     res.status(303)
     res.redirect('/PaginaAdmin')
@@ -87,12 +82,22 @@ app.get('/noadmin',(req,res)=>{
 
 })
 
+//Apartir de aqui empieza el codigo de la pgaina con todos los equipos
+
+//Ruta para mostrar la pagina con todos los equipos
+app.get('/PaginaAdmin',async (req,res) =>{
+
+    //tipo de contenido que se envia
+    res.contentType('text/html')
+    res.sendFile(path.join(__dirname, 'Public','Paginas','main.html'))
+})
+
 //Consulta que toma tods los equipos y los envia para mostrar en la pagina principal
 app.get('/PaginaAdmin/TablaEquipos',async (req,res)=>{
     try{
     //Se obtiene la informacion de los equipos
     let conexion = await crearConexion(mysql)
-    let [tabla] = await conexion.query('SELECT equipos.id_equipos,equipos.nombre_equipo,equipos.marca,equipos.modelo_equipo,equipos.fecha_adquisicion,estado_equipos.nombre AS estado FROM equipos JOIN estado_equipos ON equipos.estado_id = estado_equipos.id_estado;')
+    let [tabla] = await conexion.query('SELECT equipos.id_equipos,equipos.nombre_equipo,equipos.marca,equipos.modelo_equipo,equipos.fecha_adquisicion,estado_equipos.nombre AS estado FROM equipos JOIN estado_equipos ON equipos.estado_id = estado_equipos.id_estado ORDER BY equipos.id_equipos ASC;')
     res.json(tabla);
     }
     catch(err){
@@ -112,6 +117,10 @@ app.get('/logout',(req,res)=>{
     res.status(303)
     res.redirect('/')
 })
+
+
+//Apartir de este punto se encuentra la logica de la pagina con los datos generales del equipo
+
 //Ruta para mostra la pagina indivual de los equipos
 app.get('/PagComputadora',(req,res)=>{
 
@@ -132,9 +141,87 @@ app.get('/PagComputadora/DatosEquipo',async (req,res)=>{
     res.json(equipo)
 
 })
+//GET que toma los datos de los mantenimientos
+app.get('/PagComputadora/HistorialM',async (req,res)=>{
+
+    const { id } = req.query
+    let consultas = await crearConexion(mysql)
+    const [mantenimientos] = await consultas.query(
+        `SELECT fecha_mantenimiento,tipo_mantenimiento,descripcion FROM historial_mantenimientos WHERE equipo_id= ? ORDER BY fecha_mantenimiento DESC LIMIT 3 `,
+        [id]
+    )
+    res.json(mantenimientos)
+})
+//Actualiza el estado de el equipo 
+app.post('/PagComputadoras/CambiarEstado',async (req,res)=>{
+    const { id_equipo, id_estado } = req.body
+        let consultas = await crearConexion(mysql)
+        await consultas.query(
+            'UPDATE equipos SET estado_id = ? WHERE id_equipos = ?',
+            [id_estado, id_equipo]
+        )
+})
+//Consulta para traer los estados de el equipo
+app.get('/PagComputadoras/EstadosEquipo', async (req, res) => {
+    let consultas = await crearConexion(mysql)
+    const [estados] = await consultas.query('SELECT * FROM estado_equipos')
+    res.json(estados)
+})
 
 
-//Funciona como HANDLER para cuando no se encuentra cierta direccion
+
+//Consulta para verificar si el equipo esta asignado o no
+app.get('/PagComputadora/Asignacion', async (req, res) => {
+    const { id } = req.query
+    let consultas = await crearConexion(mysql)
+    const [[asignacion]] = await consultas.query(
+       `SELECT asignaciones.*, empleados.nombre_empleado
+         FROM asignaciones 
+         JOIN empleados ON asignaciones.empleado_id = empleados.id_empleado
+         WHERE asignaciones.equipo_id = ? AND asignaciones.fecha_fin IS NULL`,
+        [id]
+    )
+    res.json(asignacion || null)
+})
+//Consulta para terminar la asignacion
+app.post('/PagComputadora/FinalizarAsignacion', async (req, res) => {
+    const { id } = req.query
+    let consultas = await crearConexion(mysql)
+    await consultas.query(
+        `UPDATE asignaciones SET fecha_fin = NOW() 
+         WHERE equipo_id = ? AND fecha_fin IS NULL`,
+        [id]
+    )
+    res.json({ mensaje: 'Asignacion finalizada' })
+})
+//consulta para conseguir la lista de empleados para asignar
+app.get('/PagComputadora/ListaEmpleados', async (req, res) => {
+    let consultas = await crearConexion(mysql)
+    const [empleados] = await consultas.query(
+        `SELECT empleados.*,areas.nombre_area AS area 
+        FROM empleados
+        JOIN areas ON empleados.area_id = areas.id_area`
+    )
+    res.json(empleados)
+})
+//Logica para Asignar empleados
+app.post('/PagComputadora/Asignar', async (req, res) => {
+    const { id_equipo, id_empleado } = req.body
+    let consultas = await crearConexion(mysql)
+    await consultas.query(
+        `INSERT INTO asignaciones (equipo_id, empleado_id, fecha_asignacion) 
+         VALUES (?, ?, NOW())`,
+        [id_equipo, id_empleado]
+    )
+    
+})
+
+
+
+
+//Logica de solo servidor
+
+//Funciona como receptor de errores para cuando no se encuentra cierta direccion
 app.use((req, res) => {
     res.type('text/plain')
 	res.status(404);

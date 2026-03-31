@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equipo No.1 - Chamoneta Inc</title>
+    <title>Equipo - Chamoneta Inc</title>
     <link rel="stylesheet" href="/Paginas/computadora.css">
 </head>
 <body>
  
     <nav class="navbar">
-        <a href="main.html" class="btn-regresar">← Regresar a equipos</a>
+        <a href="/PaginaAdmin" class="btn-regresar">← Regresar a equipos</a>
         <a href="#popup-usuario" class="nav-user">
             <div class="nav-avatar" id="nav-iniciales"></div>
             <div class="nav-info">
@@ -44,28 +44,27 @@
             <h3 class="mant-titulo">Historial de Mantenimiento</h3>
  
             <!--registro 1-->
-            <div class="mant-registro">
-                <p class="mant-fecha">19/diciembre/2025</p>
-                <hr class="mant-linea">
-                <p class="mant-dato">Tipo de mantenimiento: Preventivo</p>
-                <hr class="mant-linea">
-                <p class="mant-dato">Se cambio la pasta termica del equipo</p>
-            </div>
- 
-            <!--registro 2-->
-            <div class="mant-registro">
-                <p class="mant-fecha">30/diciembre/2025</p>
-                <hr class="mant-linea">
-                <p class="mant-dato">Tipo de mantenimiento: Preventivo</p>
-                <hr class="mant-linea">
-                <p class="mant-dato">Se limpio el equipo</p>
+            <div id="historial-container">
+
             </div>
  
         </div>
     </div>
+
+    <!--Popup para editar estado de equipo-->
+    <div class="popup-overlay" id="popup-estado">
+        <a href="#" class="popup-fondo"></a>
+        <div class="popup-caja">
+            <a href="#" class="popup-cerrar">✕</a>
+            <h3>Cambiar Estado</h3>
+            <div id="opciones-estado"></div>
+        </div>
+    </div>
+
+
  
     <div class="pagina-titulo">
-        <h1>Equipo No.1</h1>
+        <h1 id="NumeroEquipo"></h1>
     </div>
  
     <div class="detalle-container">
@@ -95,7 +94,7 @@
                     </svg>
                     Empleado Asignado
                 </p>
-                <p class="info-valor-grande">Pepito</p>
+                <p class="info-valor-grande" id="NombreEmp"></p>
             </div>
  
             <hr class="divisor">
@@ -109,9 +108,9 @@
                         <line x1="8" y1="2" x2="8" y2="6"/>
                         <line x1="16" y1="2" x2="16" y2="6"/>
                     </svg>
-                    Fecha
+                    Fecha de asignacion
                 </p>
-                <p class="info-valor-grande">14/marzo/2026</p>
+                <p class="info-valor-grande" id="FechaEmpAsignado"></p>
             </div>
  
             <!--generar reporte-->
@@ -172,18 +171,22 @@
  
             <div class="spec-fila">
                 <span class="spec-label">Fecha de Compra:</span>
-                <span class="spec-valor" id="Fecha"></span>
+                <span class="spec-valor" id="FechaE"></span>
             </div>
             <hr class="spec-divisor">
  
             <div class="spec-fila">
                 <span class="spec-label">Estado de Equipo:</span>
                 <span class="spec-valor" id="Estado"></span>
+                <a href="#popup-estado" class="btn-editar">✏️</a>
             </div>
  
             <!--Botones inferiores-->
             <div class="botones-grupo">
-                <a href="#" class="btn-finalizar">Finalizar asignacion</a>
+                <a href="#" class="btn-finalizar"></a>
+                <select id="lista-empleados" style="display:none">
+                    <option value="">Selecciona un empleado</option>
+                </select>
                 <!--boton que abre el popup de mantenimiento-->
                 <a href="#popup-mantenimiento" class="btn-mantenimiento">Historial de Mantenimiento</a>
             </div>
@@ -224,8 +227,11 @@
             // Pide los datos al servidor
             const respuesta = await fetch(`/PagComputadora/DatosEquipo?id=${id}`)
             const equipo = await respuesta.json()
+            
+            //Asigna un numero en base a la id
+            document.getElementById('NumeroEquipo').textContent=`Equipo No.${id}`
 
-            // Llena los campos
+            // Llena los campos de el equipo
             document.getElementById('NombreEquipo').textContent = equipo.nombre_equipo
             document.getElementById('MarcaEquipo').textContent = equipo.marca
             document.getElementById('ModeloEquipo').textContent = equipo.modelo_equipo
@@ -234,12 +240,160 @@
             document.getElementById('NumeroSerie').textContent = equipo.numero_serie
             document.getElementById('Disco').textContent = `${equipo.almacenamiento} GB`
             document.getElementById('Os').textContent = equipo.sistema_operativo
-            document.getElementById('Fecha').textContent = new Date(equipo.fecha_adquisicion).toLocaleDateString()
+            document.getElementById('FechaE').textContent = new Date(equipo.fecha_adquisicion).toLocaleDateString()
             document.getElementById('Estado').textContent = equipo.estado
         }
 
         cargarEquipo()
+    </script>
+    <!--Script Principal, Mostrar Mantenimientos recientes del Equipo-->
+    <script>
+        async function cargarMantenimientos(){
+            // Lee el id de la URL
+            const params = new URLSearchParams(window.location.search)
+            const id = params.get('id')
+
+            const respuesta = await fetch(`/PagComputadora/HistorialM?id=${id}`)
+            const mantenimientos = await respuesta.json()
+
+            const container = document.getElementById('historial-container')
+            container.innerHTML = ''
+
+            if (mantenimientos.length === 0) {
+                container.innerHTML = '<p>No hay registros de mantenimiento</p>'
+                return
+            }
+
+            mantenimientos.forEach(mant => {
+                container.innerHTML += `
+                    <div class="mant-registro">
+                        <p class="mant-fecha">${new Date(mant.fecha_mantenimiento).toLocaleDateString()}</p>
+                        <hr class="mant-linea">
+                        <p class="mant-dato"><b>Tipo:</b> ${mant.tipo_mantenimiento}</p>
+                        <hr class="mant-linea">
+                        <p class="mant-dato"><b>Descripcion:</b> ${mant.descripcion}</p>
+                    </div>
+                `
+            })
+        }
+        document.querySelector('a[href="#popup-mantenimiento"]').addEventListener('click', cargarMantenimientos)
+    </script>
+
+     <!--Script para cargar la lista de empleados a la pagina-->
+    <script>
+        async function cargarEmpleados() {
+            const respuesta = await fetch('/PagComputadora/ListaEmpleados')
+            const empleados = await respuesta.json()
+
+            const dropdown = document.getElementById('lista-empleados')
+            empleados.forEach(emp => {
+                dropdown.innerHTML += `<option value="${emp.id_empleado}">${emp.nombre_empleado}/${emp.area}</option>`
+            })
+        }
+
+        cargarEmpleados()
+    </script>
+
+
+    <!--Script para boton asignacion-->
+    <script>
+        async function verificarAsignacion() {
+            const params = new URLSearchParams(window.location.search)
+            const id = params.get('id')
+
+            const respuesta = await fetch(`/PagComputadora/Asignacion?id=${id}`)
+            const asignacion = await respuesta.json()
+
+            const boton = document.querySelector('.btn-finalizar')
+            const TextoEmp = document.getElementById('NombreEmp')
+            const TextoFecha = document.getElementById('FechaEmpAsignado')
+            //condcional para verificar el estado de asignacion de el equipo
+            if (asignacion) {
+                //codigo si el equipo esta asignado
+                boton.textContent = 'Finalizar asignacion'
+                TextoEmp.textContent=`${asignacion.nombre_empleado}`
+                TextoFecha.textContent=`${new Date(asignacion.fecha_asignacion).toLocaleDateString()}`
+                boton.addEventListener('click', async (e) => {
+                    e.preventDefault()
+                    await fetch(`/PagComputadora/FinalizarAsignacion?id=${id}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    })
+                    verificarAsignacion() 
+                })
+            } 
+            else {
+                //codigo si el equipo no esta asignado
+                boton.textContent = 'Asignar equipo'
+                TextoEmp.textContent = 'Sin asignar'
+                TextoFecha.textContent= ''
+                
+                const dropdown = document.getElementById('lista-empleados')
+                dropdown.style.display = 'block'
+
+                boton.addEventListener('click', async (e) => {
+                    e.preventDefault()
+
+                    const id_empleado = dropdown.value
+                    if (!id_empleado) {
+                        alert('Selecciona un empleado')
+                        return
+                    }
+
+                    await fetch('/PagComputadora/Asignar', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id_equipo: id, id_empleado })
+                    })
+
+                    dropdown.style.display = 'none'
+                    verificarAsignacion()
+                })
+            }
+        }
+
+        verificarAsignacion()
 
     </script>
+    <script>
+        async function cargarOpciones() {
+            const params = new URLSearchParams(window.location.search)
+            const id = params.get('id')
+
+            const respuesta = await fetch('/PagComputadoras/EstadosEquipo')
+            const estados = await respuesta.json()
+
+            const container = document.getElementById('opciones-estado')
+            container.innerHTML = ''
+
+            estados.forEach(estado => {
+                container.innerHTML += `
+                    <button class="btn-estado" onclick="cambiarEstado(${estado.id_estado}, ${id})">
+                        ${estado.nombre}
+                    </button>
+                `
+            })
+        }
+
+        async function cambiarEstado(id_estado, id_equipo) {
+            await fetch('/PagComputadoras/CambiarEstado', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_equipo, id_estado })
+            })
+
+            // Cierra el popup y recarga los datos
+            window.location.href = '#'
+            cargarEquipo()
+        }
+
+        document.querySelector('a[href="#popup-estado"]').addEventListener('click', cargarOpciones)
+    </script>
+
+   
+
+
+
 </body>
 </html>
